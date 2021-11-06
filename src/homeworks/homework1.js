@@ -48,16 +48,10 @@ function isPerfectNumber(number) {
     return sumOfDivisorsOfNumberExcludingItself === number
     
 }
-let isPrimeGenerator = isPrime(1,2,3,4,5,6,7,8,9,10,11,12)
-let isPrimeNext = isPrimeGenerator.next()
-while (isPrimeNext.done === false) {
-    
-    let isPrimeValue = isPrimeNext.value
-    
-    if (isPrimeValue.prime) {
-        console.log(isPrimeValue.number + " Asal Sayıdır")
+for(let x of isPrime(1,2,3,4,5,6,7,8,9,10,11,12)){
+    if (x.prime) {
+        console.log(x.number +" Asal Sayıdır")
     }
-    isPrimeNext = isPrimeGenerator.next()
 }
 
 
@@ -73,17 +67,12 @@ for (let i = 1; i <= 1000; i++) {
 
 
 
-let isPrimeGenerator2 = isPrime(...numberList)
-let isPrimeNext2 = isPrimeGenerator2.next()
+
 let primeNumberList = []
-while (isPrimeNext2.done === false) {
-    
-    let isPrimeValue = isPrimeNext2.value
-    
-    if (isPrimeValue.prime) {
-        primeNumberList.push(isPrimeValue.number)
+for(let x of isPrime(...numberList)){
+    if (x.prime) {
+        primeNumberList.push(x.number)
     }
-    isPrimeNext2 = isPrimeGenerator2.next()
 }
 console.log("Asal sayılar listenin içindedir", primeNumberList)
 
