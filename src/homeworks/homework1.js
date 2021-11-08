@@ -1,24 +1,31 @@
-function getDivisorsArray(number) {
-    let list = []
-    for (let i = 1; i <= number; i++) {
+function* getDivisorsArray(...numbers) {
+
+    for(let number of numbers){
+        let list = []
+
+        for (let i = 1; i <= number; i++) {
     
-        if (number % i == 0) {
+            if (number % i == 0){
             list.push(i)
-        }
+            }
     
+        }
+        yield {divisors:list,number:number}
     }
-    return list
 }
 
 
 function* isPrime(...numbers) {
     
-
+    let arrayOfArrayOfDivisors = []
+    for(let x of getDivisorsArray(...numbers)){
+        arrayOfArrayOfDivisors.push(x.divisors)
+    }
     for (let i = 0; i < numbers.length; i++) {
-        let arrayOfDivisorsOfNumber = getDivisorsArray(numbers[i])
-        arrayOfDivisorsOfNumber.shift()
-        arrayOfDivisorsOfNumber.pop()
-        if (arrayOfDivisorsOfNumber.length === 0) {
+        
+        arrayOfArrayOfDivisors[i].shift()
+        arrayOfArrayOfDivisors[i].pop()
+        if (arrayOfArrayOfDivisors[i].length === 0) {
             yield {number:numbers[i],prime:true}
         }
         else{ yield {number:numbers[i],prime:false}}
@@ -27,13 +34,19 @@ function* isPrime(...numbers) {
     
 }
 
+
+
 function areTheyNumbersFriendlyNumbers(number1, number2) {
-    let arrayOfDivisorsOfNumber1 = getDivisorsArray(number1)
-    let arrayOfDivisorsOfNumber2 = getDivisorsArray(number2)
-    arrayOfDivisorsOfNumber1.pop()
-    arrayOfDivisorsOfNumber2.pop()
-    let sumOfDivisorsOfNumber1ExcludingItself = arrayOfDivisorsOfNumber1.reduce((acc, x) => {return acc += x},0)
-    let sumOfDivisorsOfNumber2ExcludingItself = arrayOfDivisorsOfNumber2.reduce((acc, x) => {return acc += x},0)
+    
+    let arrayOfArrayOfDivisors = []
+    for(let x of getDivisorsArray(number1,number2)){
+        arrayOfArrayOfDivisors.push(x.divisors)
+    }
+    for(let x of arrayOfArrayOfDivisors){
+        x.pop()
+    }
+    let sumOfDivisorsOfNumber1ExcludingItself = arrayOfArrayOfDivisors[0].reduce((acc, x) => {return acc += x},0)
+    let sumOfDivisorsOfNumber2ExcludingItself = arrayOfArrayOfDivisors[1].reduce((acc, x) => {return acc += x},0)
     //console.log(sumOfDivisorsOfNumber1ExcludingItself)
     //console.log(sumOfDivisorsOfNumber2ExcludingItself)
     return sumOfDivisorsOfNumber1ExcludingItself === number2 && sumOfDivisorsOfNumber2ExcludingItself === number1
@@ -41,7 +54,7 @@ function areTheyNumbersFriendlyNumbers(number1, number2) {
 }
 
 function isPerfectNumber(number) {
-    let arrayOfDivisorsOfNumber = getDivisorsArray(number)
+    let arrayOfDivisorsOfNumber = getDivisorsArray(number).next().value.divisors
     arrayOfDivisorsOfNumber.pop()
     let sumOfDivisorsOfNumberExcludingItself = arrayOfDivisorsOfNumber.reduce((acc,x) => {return acc += x},0)
     //console.log(sumOfDivisorsOfNumberExcludingItself)
