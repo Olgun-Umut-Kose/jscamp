@@ -3,6 +3,8 @@ import { BaseLogger } from "../crossCuttingConcerns/logging/logger.js";
 import UserDataAccess from "../dataAccess/userDataAccess.js";
 import SuccessDataResult from "../models/results/successDataResult.js";
 import SuccessResult from "../models/results/successResult.js";
+import ErrorDataResult from "../models/results/errorDataResult.js";
+import ErrorResult from "../models/results/errorResult.js";
 
 export default class UserService {
     constructor({loggerService, userDataAccess}) {
@@ -12,7 +14,7 @@ export default class UserService {
 
     add(user) {
 
-        this.userDataAccess.add(user);
+        this.userDataAccess.add(user)
 
         this.loggerService.log(user);
         return SuccessResult.CreateResult(messages.userAdded)
@@ -24,7 +26,7 @@ export default class UserService {
         this.loggerService.log(user)
         return SuccessResult.CreateResult(messages.userUpdated)
     }
-    deleteBy(user, predicate = (x) => x.id === user.id) {
+    deleteBy(user, predicate = (value,index,array) => value.id === user.id) {
 
         this.userDataAccess.deleteBy(user, predicate);
         return SuccessResult.CreateResult(messages.userDeleted)
@@ -35,7 +37,9 @@ export default class UserService {
     }
 
     getById(id) {
-        return SuccessDataResult.CreateResult({message:messages.successful,data:this.userDataAccess.getBy((u) => u.id === id)})
+        const user = this.userDataAccess.getBy((u) => u.id === id)
+        if(!user) return ErrorResult.CreateResult(messages.userNotFind)
+        return SuccessDataResult.CreateResult({message:messages.successful,data:user})
     }
 
     getSortedByField(field) {

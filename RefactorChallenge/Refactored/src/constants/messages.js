@@ -7,6 +7,7 @@ export const messages ={
     userDeleted:"User deleted",
     successful:"successful",
     userUpdated:"User Updated",
-    privateConstructor:"private constructor"
+    privateConstructor:"private constructor",
+    userNotFind:"user not find"
 
 }

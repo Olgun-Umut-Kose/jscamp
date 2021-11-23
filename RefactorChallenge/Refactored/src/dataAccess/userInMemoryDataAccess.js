@@ -26,8 +26,8 @@ export default class UserInMemoryDataAccess extends UserDataAccess{
         const index = this.users.findIndex(x => x.id === user.id)
         this.users[index] = user
     }
-    deleteBy(user,predicate = (x) => x.id === user.id){
-        this.users = this.users.filter((x,y,z) => PredicateHelper.convertToNagative(predicate).call(null,x,y,z))
+    deleteBy(user,predicate = (value,index,array) => value.id === user.id){
+        this.users = this.users.filter((value,index,array) => PredicateHelper.convertToNagative(predicate).call(null,value,index,array,user)) 
     }
     getAllBy(filter = () => true){
         return this.users.filter(filter)
