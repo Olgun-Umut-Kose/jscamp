@@ -8,7 +8,7 @@ export default class UserDataAccess{
     deleteBy(user,predicate = (x) => x.id === user.id ){
 
     }
-    getAllBy(filter = () => true){
+    getAllBy(filter = (value,index,array) => true){
 
     }
     getBy(filter){

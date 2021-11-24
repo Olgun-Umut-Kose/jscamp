@@ -1,18 +1,19 @@
+
 export class BaseLogger{
-    log(data){
-        console.log("Default logger : " + data)
+    log(data,message){
+        console.log("Default logger : ", data,message)
     }
 }
 
 export class ElasticLogger extends BaseLogger{
-    log(data){
-        console.log("Logged to Elastic" + data)
+    log(data,message){
+        console.log("Logged to Elastic",data,message)
     }
 }
 
 export class MongoLogger extends BaseLogger{
-    log(data){
-        console.log("Logged to Mongo" + data)
+    log(data,message){
+        console.log("Logged to Mongo", data,message)
     }
 }
 

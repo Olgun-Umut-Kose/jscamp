@@ -18,8 +18,10 @@ export default class UserInMemoryDataAccess extends UserDataAccess{
     }
     add(user){
         //otomatik artan yapmak istedim
-        let lastUser = this.users[this.users.length-1]
-        user.id = lastUser.id++
+        const lastUser = this.users[this.users.length-1]
+        const lastid = lastUser.id
+        user.id = lastid + 1
+        
         this.users.push(user)
     }
     update(user){
@@ -29,10 +31,11 @@ export default class UserInMemoryDataAccess extends UserDataAccess{
     deleteBy(user,predicate = (value,index,array) => value.id === user.id){
         this.users = this.users.filter((value,index,array) => PredicateHelper.convertToNagative(predicate).call(null,value,index,array,user)) 
     }
-    getAllBy(filter = () => true){
-        return this.users.filter(filter)
+    getAllBy(filterPredicate = (value,index,array) => true){
+        
+        return this.users.filter((value,index,array) => filterPredicate.call(null,value,index,array))
     }
     getBy(filter){
-        return this.users.find(filter)
+        return this.users.find((value,index,obj) => filter.call(null,value,index,obj))
     }
 }

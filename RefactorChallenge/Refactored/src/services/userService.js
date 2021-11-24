@@ -3,7 +3,6 @@ import { BaseLogger } from "../crossCuttingConcerns/logging/logger.js";
 import UserDataAccess from "../dataAccess/userDataAccess.js";
 import SuccessDataResult from "../models/results/successDataResult.js";
 import SuccessResult from "../models/results/successResult.js";
-import ErrorDataResult from "../models/results/errorDataResult.js";
 import ErrorResult from "../models/results/errorResult.js";
 
 export default class UserService {
@@ -16,19 +15,22 @@ export default class UserService {
 
         this.userDataAccess.add(user)
 
-        this.loggerService.log(user);
+        this.loggerService.log(user,messages.userAdded);
         return SuccessResult.CreateResult(messages.userAdded)
     }
     update(user){
 
         this.userDataAccess.update(user)
         
-        this.loggerService.log(user)
+        this.loggerService.log(user,messages.userUpdated)
         return SuccessResult.CreateResult(messages.userUpdated)
     }
     deleteBy(user, predicate = (value,index,array) => value.id === user.id) {
-
+        const firstState = this.getAllBy()
         this.userDataAccess.deleteBy(user, predicate);
+        const lastState = this.getAllBy()
+        if(firstState.data.length == lastState.data.length) return ErrorResult.CreateResult(messages.failed)
+        this.loggerService.log(user,messages.userDeleted)
         return SuccessResult.CreateResult(messages.userDeleted)
     }
 

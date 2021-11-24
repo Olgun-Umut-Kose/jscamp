@@ -4,5 +4,10 @@ export default class PredicateHelper{
             return !predicate.apply(null,args)
         }
     }
+    static combineWithTypeFilter(predicate,type){
+        return function (...args) {
+            return args[0] instanceof type && predicate.apply(null,args)
+        }
+    }
 
 }
